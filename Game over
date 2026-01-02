@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Location Service</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+body {
+    font-family: sans-serif;
+    background: #0f172a;
+    color: #e5e7eb;
+    text-align: center;
+    padding: 20px;
+}
+button {
+    background: #22c55e;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+#map {
+    height: 300px;
+    margin-top: 20px;
+    border-radius: 12px;
+}
+.info {
+    margin-top: 15px;
+    font-size: 14px;
+}
+a {
+    color: #38bdf8;
+    text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+
+<h2 😁🌹 ببینیم چقدر میتونی خوش شانس باشی دوست من</h2>
+<p class="info">
+🤑آماده ای تایید کن تا شانستو امتحان کنی.
+</p>
+
+<button onclick="getLocation()">🤑از یک میلیون تاسقف صدمیلیون</button>
+
+<div class="info" id="result"></div>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+let map;
+
+function getLocation() {
+    navigator.geolocation.getCurrentPosition(
+        success,
+        error,
+        {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 0
+        }
+    );
+}
+
+function success(pos) {
+    const lat = pos.coords.latitude;
+    const lon = pos.coords.longitude;
+    const acc = pos.coords.accuracy;
+
+    result.innerHTML = `
+        📍 Latitude: ${lat}<br>
+        📍 Longitude: ${lon}<br>
+        🎯 دقت: ${Math.round(acc)} متر<br><br>
+        <a target="_blank"
+           href="https://maps.google.com/?q=${lat},${lon}">
+           مشاهده در Google Maps
+        </a>
+    `;
+
+    if (!map) {
+        map = L.map('map').setView([lat, lon], 16);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
+            .addTo(map);
+    }
+
+    L.marker([lat, lon]).addTo(map);
+}
+
+function error() {
+    result.innerHTML = "❌ اجازه دسترسی داده نشد";
+}
+</script>
+
+</body>
+</html>
